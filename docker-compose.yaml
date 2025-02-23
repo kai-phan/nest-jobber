@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: jobber-auth
+    ports:
+      - "5432:5432"
+    volumes:
+      - jobber-auth-data:/var/lib/postgresql/data
+#      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+volumes:
+  jobber-auth-data:
