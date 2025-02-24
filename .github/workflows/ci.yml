@@ -30,6 +30,8 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - uses: arduino/setup-protoc@v3
+
       - run: npm ci --legacy-peer-deps
       - uses: nrwl/nx-set-shas@v4
 
