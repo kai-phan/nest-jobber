@@ -14,15 +14,15 @@ export class JobService implements OnModuleInit {
 
   constructor(private readonly discoveryService: DiscoveryService) {}
 
-  async getJobs() {
-    return this.jobs.map((j) => j.meta);
-  }
-
   async onModuleInit() {
     this.jobs =
       await this.discoveryService.providersWithMetaAtKey<JobMetadataInterface>(
         JOB_METADATA_KEY,
       );
+  }
+
+  async getJobs() {
+    return this.jobs.map((j) => j.meta);
   }
 
   async executeJob(name: string) {

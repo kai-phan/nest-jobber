@@ -1,10 +1,14 @@
 import { Resolver, Args, Query, Mutation } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+
+import { GrpcAuthGuard } from '@jobber/nestjs';
 
 import { Job } from './models/job.model';
 import { JobService } from './job.service';
 import { JobInput } from './dto/job.input';
 
 @Resolver()
+@UseGuards(GrpcAuthGuard)
 export class JobResolver {
   constructor(private readonly jobService: JobService) {}
 

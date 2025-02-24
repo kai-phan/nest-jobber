@@ -5,7 +5,8 @@
   "scripts": {
     "generate-prisma-client": "nx run-many --target=generate-prisma-client --p=jobber-auth",
     "generate-ts-proto": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=types --ts_proto_opt=nestJs=true proto/*.proto",
-    "prepare": "husky"
+    "prepare": "husky",
+    "start": "nx run-many --target=serve --p=jobber-auth,jobber-jobs"
   },
   "nx": {
     "targets": {
