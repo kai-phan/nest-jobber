@@ -11,6 +11,25 @@ services:
     volumes:
       - jobber-auth-data:/var/lib/postgresql/data
 #      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-
+    networks:
+      - backend
+  pulsar:
+    image: apachepulsar/pulsar
+    container_name: pulsar
+    command:
+      - bin/pulsar
+      - standalone
+    ports:
+      - "8080:8080"
+      - "6650:6650"
+    volumes:
+      - pulsar:/pulsar
+    networks:
+      - backend
 volumes:
   jobber-auth-data:
+  pulsar:
+
+networks:
+  backend:
+    driver: bridge

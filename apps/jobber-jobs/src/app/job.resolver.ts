@@ -19,6 +19,6 @@ export class JobResolver {
 
   @Mutation(() => Job)
   async executeJob(@Args('jobInput') jobInput: JobInput) {
-    return this.jobService.executeJob(jobInput.name);
+    return this.jobService.executeJob(jobInput.name, jobInput.data);
   }
 }

@@ -3,11 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 
-import { JobModule } from './jobs/job.module';
+import { JobModule } from './job.module';
+import { PulsarModule } from '@jobber/pulsar';
 
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     JobModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
@@ -19,6 +20,7 @@ import { JobModule } from './jobs/job.module';
         },
       },
     }),
+    PulsarModule,
   ],
 })
 export class AppModule {}
