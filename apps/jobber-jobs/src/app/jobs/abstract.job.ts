@@ -1,4 +1,4 @@
-import { PulsarService } from '@jobber/pulsar';
+import { PulsarService, serialize } from '@jobber/pulsar';
 import { Producer } from 'pulsar-client';
 import { plainToInstance } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
@@ -9,22 +9,32 @@ export abstract class AbstractJob<T extends object> {
   abstract messageClass: new () => T;
   protected constructor(private readonly pulsarService: PulsarService) {}
 
-  async execute(name: string, data: T): Promise<string> {
+  async execute(name: string, data: T | T[]): Promise<void> {
     if (!this.producer) {
       this.producer = await this.pulsarService.createProducer(name);
     }
 
-    const messageId = await this.producer.send({
-      data: Buffer.from(JSON.stringify(data)),
-    });
+    if (Array.isArray(data)) {
+      for (const item of data) {
+        await this.send(item);
+      }
+      return;
+    }
 
-    return messageId.toString();
+    await this.send(data);
+  }
+
+  async send(data: T): Promise<void> {
+    await this.validate(data);
+    await this.producer.send({
+      data: serialize(data),
+    });
   }
 
   async validate(data: T) {
     const errors = await validate(plainToInstance(this.messageClass, data));
     if (errors.length > 0) {
-      throw new BadRequestException('Invalid data');
+      throw new BadRequestException('Invalid data', { cause: errors });
     }
   }
 }
